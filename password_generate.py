@@ -56,7 +56,7 @@ with col2:
         else:
             st.markdown(f"<div class='password-box'>{password}</div>", unsafe_allow_html=True)
             
-            # Copy to clipboard button
+            # Copy to clipboard button 
             st.code(password, language="")
 
 st.write("---")
