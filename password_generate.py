@@ -1,64 +1,40 @@
-import streamlit as st
-import random
-import string
+import re
 
-# Function to generate a password
-def generate_password(length, use_digits, use_special):
-    characters = string.ascii_letters
-    if use_digits:
-        characters += string.digits
-    if use_special:
-        characters += string.punctuation
-
-    if not characters:
-        return "Error: No character set selected!"
+def check_password_strength(password):
+    score = 0
     
-    return "".join(random.choice(characters) for _ in range(length))
+    # Length Check
+    if len(password) >= 8:
+        score += 1
+    else:
+        print("❌ Password should be at least 8 characters long.")
+    
+    # Upper & Lowercase Check
+    if re.search(r"[A-Z]", password) and re.search(r"[a-z]", password):
+        score += 1
+    else:
+        print("❌ Include both uppercase and lowercase letters.")
+    
+    # Digit Check
+    if re.search(r"\d", password):
+        score += 1
+    else:
+        print("❌ Add at least one number (0-9).")
+    
+    # Special Character Check
+    if re.search(r"[!@#$%^&*]", password):
+        score += 1
+    else:
+        print("❌ Include at least one special character (!@#$%^&*).")
+    
+    # Strength Rating
+    if score == 4:
+        print("✅ Strong Password!")
+    elif score == 3:
+        print("⚠️ Moderate Password - Consider adding more security features.")
+    else:
+        print("❌ Weak Password - Improve it using the suggestions above.")
 
-# Custom Styling
-st.markdown(
-    """
-    <style>
-        .password-box {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff4b4b;
-            background: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-            border: 2px solid #ff4b4b;
-            display: inline-block;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# UI Components
-st.title("🔑 Stylish Password Generator")
-st.write("Generate a **secure** and **random** password instantly!")
-
-# Layout using columns
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    length = st.slider("📏 Select Password Length", min_value=6, max_value=32, value=12)
-    use_digits = st.checkbox("🔢 Include Digits")
-    use_special = st.checkbox("🔣 Include Special Characters")
-
-    # Generate Password Button
-    if st.button("🚀 Generate Password"):
-        password = generate_password(length, use_digits, use_special)
-
-        if "Error" in password:
-            st.error(password)
-        else:
-            st.markdown(f"<div class='password-box'>{password}</div>", unsafe_allow_html=True)
-            
-            # Copy to clipboard button 
-            st.code(password, language="")
-
-st.write("---")
-st.markdown("👨‍💻 Built with ❤️ by [Abdul Waheed](https://github.com/AI-Balushi)")
-
+# Get user input
+password = input("Enter your password: ")
+check_password_strength(password)
