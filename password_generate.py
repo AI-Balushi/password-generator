@@ -1,3 +1,4 @@
+#regular expression module using the import statement
 import re
 
 def check_password_strength(password):
